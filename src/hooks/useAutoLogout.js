@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
 
-export function useAutoLogout(timeout = 30 * 60 * 1000) { // 30 minutes
+export function useAutoLogout(timeout = 30 * 60 * 1000) {
   const { logout } = useAuthStore();
 
   useEffect(() => {

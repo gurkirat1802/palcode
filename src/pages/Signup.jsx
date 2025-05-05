@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { auth } from '../api/firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Signup() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -17,11 +17,11 @@ function Login() {
     setIsLoading(true);
     try {
       const { email, password } = data;
-      const credential = await signInWithEmailAndPassword(auth, email, password);
+      const credential = await createUserWithEmailAndPassword(auth, email, password);
       setUser(credential.user);
       navigate('/dashboard');
     } catch (err) {
-      setError('Failed to log in. Please check your email or password.');
+      setError('Failed to sign up. Email may already be in use.');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -31,7 +31,7 @@ function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-gray-200">
       <div className="max-w-md w-full bg-white shadow-xl rounded-2xl p-8 transform transition-all duration-300 hover:scale-105">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Log In</h2>
+        <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Sign Up</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -88,14 +88,14 @@ function Login() {
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
               </svg>
             ) : null}
-            {isLoading ? 'Logging in...' : 'Log In'}
+            {isLoading ? 'Signing up...' : 'Sign Up'}
           </button>
           {error && <p className="text-sm text-red-600 text-center">{error}</p>}
         </form>
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{' '}
-          <a href="/signup" className="text-blue-600 hover:underline">
-            Sign Up
+          Already have an account?{' '}
+          <a href="/login" className="text-blue-600 hover:underline">
+            Log In
           </a>
         </p>
       </div>
@@ -103,4 +103,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
